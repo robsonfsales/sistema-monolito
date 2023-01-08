@@ -13,10 +13,16 @@ export default class AddClientUseCase implements UseCaseInterface{
 
     async execute(input: AddClientInputDto): Promise<AddClientOutputDto> {
         const props = {
-            id: new Id(input.id) || new Id(),
+            id: new Id(input.id) || new Id(),           
             name: input.name,
+            document: input.document,
             email: input.email,
-            address: input.address,
+            street: input.street,
+            number: input.number,
+            complement: input.complement,
+            city: input.city,
+            state: input.state,
+            zipCode: input.zipCode,
         }
 
         const client = new Client(props);
@@ -25,8 +31,14 @@ export default class AddClientUseCase implements UseCaseInterface{
         return {
             id: client.id.id,
             name: client.name,
+            document: client.document,
             email: client.email,
-            address: client.address,
+            street: client.street,
+            number: client.number,
+            complement: client.complement,
+            city: client.city,
+            state: client.state,
+            zipCode: client.zipCode,
             createdAt: client.createdAt,
             updatedAt: client.updatedAt,
         };
