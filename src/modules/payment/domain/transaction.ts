@@ -19,8 +19,6 @@ type TransactionsProps = {
     updatedAt?: Date;
 };
 
-
-
 export default class Transaction extends BaseEntity implements AggregateRoot {
     private _amount: number;
     private _orderId: string;

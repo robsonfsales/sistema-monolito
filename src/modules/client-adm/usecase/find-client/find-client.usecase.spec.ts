@@ -1,5 +1,6 @@
 import Id from "../../../@shared/domain/value-object/id.value-object";
 import Client from "../../domain/client.entity";
+import Address from "../../value-object/Address";
 import FindClientUseCase from "./find-client.usecase";
 
 const client = new Client({
@@ -7,12 +8,14 @@ const client = new Client({
     name: "Client 1",
     document: "0000",
     email: "client1@email.com",
-    street: "street 1",
-    number: "1",
-    complement: "complement 1",
-    city: "city 1",
-    state: "State 1",
-    zipCode: "00000-111",
+    address: new Address({
+        street: "street 1",
+        number: "1",
+        complement: "complement 1",
+        city: "city 1",
+        state: "State 1",
+        zipCode: "00000-111"
+    }),
 });
 
 const MockRepository = () => {
@@ -39,12 +42,12 @@ describe("Find Client Usecase unit test", () => {
         expect(result.name).toEqual(client.name);
         expect(result.email).toEqual(client.email);
         expect(result.document).toEqual(client.document);
-        expect(result.street).toEqual(client.street);
-        expect(result.number).toEqual(client.number);
-        expect(result.complement).toEqual(client.complement);
-        expect(result.city).toEqual(client.city);
-        expect(result.state).toEqual(client.state);
-        expect(result.zipCode).toEqual(client.zipCode);
+        expect(result.street).toEqual(client.address.street);
+        expect(result.number).toEqual(client.address.number);
+        expect(result.complement).toEqual(client.address.complement);
+        expect(result.city).toEqual(client.address.city);
+        expect(result.state).toEqual(client.address.state);
+        expect(result.zipCode).toEqual(client.address.zipCode);
     });
 
 });
