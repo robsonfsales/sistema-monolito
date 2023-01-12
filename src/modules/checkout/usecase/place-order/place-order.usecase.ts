@@ -9,6 +9,7 @@ import Client from "../../domain/client.entity";
 import Order from "../../domain/order.entity";
 import Product from "../../domain/product.entity";
 import CheckoutGateway from "../../gateway/checkout.gateway";
+import Address from "../../value-object/Address";
 import { PlaceOrderInputDto, PlaceOrderOutputDto } from "./place-order.dto";
 
 export default class PlaceOrderUseCase implements UseCaseInterface {
@@ -53,8 +54,16 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
         const myClient = new Client({
             id: new Id(client.id),
             name: client.name,
+            document: client.document,
             email: client.email,
-            address: client.street,
+            address: new Address({
+                street: client.street,
+                number: client.number,
+                complement: client.complement,
+                city: client.city,
+                state: client.state,
+                zipCode: client.zipCode,
+            }),
         });
 
         // criar o objeto da order (client, products)
