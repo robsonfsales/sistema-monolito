@@ -26,13 +26,10 @@ const invoiceItem2 = new Product({
 });
 
 const invoiceEntity = new Invoice({
-    id: new Id("1"), 
     name: "Invoice 1",
     document: "Document 1",
     address: address,
     items: [invoiceItem1, invoiceItem2],
-    createdAt: new Date(),
-    updatedAt: new Date(),
 });
 
 const MockRepository = () => {

@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
-import InvoiceModel from "../repository/Invoice.model";
-import ProductModel from "../repository/product.model";
+import InvoiceModel from "../repository/invoice.model";
+import ProductModel from "../repository/invoice-item.model";
 import Address from "../value-object/Address";
 import Product from "../domain/product.entity";
 import Id from "../../@shared/domain/value-object/id.value-object";

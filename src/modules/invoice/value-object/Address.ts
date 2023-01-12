@@ -52,8 +52,6 @@ export default class Address implements ValueObject {
         return this._zipCode;
     }
 
-    
-
     validate() {
         if(this._street.length === 0) {
             throw new Error("Street is required");
