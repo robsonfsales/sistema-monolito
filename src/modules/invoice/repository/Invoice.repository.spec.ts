@@ -1,13 +1,11 @@
 import { Sequelize } from "sequelize-typescript";
 import InvoiceModel from "./Invoice.model";
-import InvoiceItemModel from "./invoice-item-product.model";
 import ProductModel from "./product.model";
 import InvoiceRepository from "./invoice.repository";
 import Id from "../../@shared/domain/value-object/id.value-object";
 import Address from "../value-object/Address";
 import Product from "../domain/product.entity";
 import Invoice from "../domain/invoice.entity";
-import InvoiceItem from "../domain/invoice-item.entity";
 
 const address = new Address({
     street: "Street 1",
@@ -30,28 +28,12 @@ const product2 = new Product({
     price: 20,
 });
 
-const invoiceItem1 = new InvoiceItem({
-    id: new Id("i1"),
-    productId: product1.id.id,
-    name: product1.name,
-    price: product1.price,
-});
-
-const invoiceItem2 = new InvoiceItem({
-    id: new Id("i2"),
-    productId: product2.id.id,
-    name: product2.name,
-    price: product2.price,
-});
-
 const invoiceEntity = new Invoice({
     id: new Id("1"), 
     name: "Invoice 1",
     document: "Document 1",
     address: address,
-    items: [invoiceItem1, invoiceItem2],
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    items: [product1, product2],
 });
 
 describe("Invoice repository tests", () => {
@@ -65,7 +47,7 @@ describe("Invoice repository tests", () => {
             sync: { force: true },
         });
 
-        sequileze.addModels([InvoiceModel, InvoiceItemModel, ProductModel]);
+        sequileze.addModels([InvoiceModel, ProductModel]);
         await sequileze.sync();
     });
 
@@ -74,18 +56,6 @@ describe("Invoice repository tests", () => {
     });
 
     it("should find a invoice", async () => {
-
-        await ProductModel.create({
-            id: product1.id.id,
-            name: product1.name,
-            price: product1.price,
-        });
-
-        await ProductModel.create({
-            id: product2.id.id,
-            name: product2.name,
-            price: product2.price,
-        });
 
         const invoiceModel = await InvoiceModel.create({
             id: invoiceEntity.id.id,
@@ -98,8 +68,8 @@ describe("Invoice repository tests", () => {
             state: invoiceEntity.address.state,
             zipCode: invoiceEntity.address.zipCode,
             items: invoiceEntity.items.map((item) => ({
-                id: item.id.id,
-                product_id: item.productId,
+                id: new Id().id,
+                productId: item.id.id,
                 name: item.name,
                 price: item.price
             })), 
@@ -108,7 +78,7 @@ describe("Invoice repository tests", () => {
             updatedAt: invoiceEntity.updatedAt,
         },
         {
-            include: [{model: InvoiceItemModel}],
+            include: [{model: ProductModel}],
         });
 
         const repository = new InvoiceRepository();
@@ -129,12 +99,10 @@ describe("Invoice repository tests", () => {
         // items
         expect(result.items.length).toBe(2);
         expect(result.items[0].id.id).toEqual(invoiceEntity.items[0].id.id);
-        expect(result.items[0].productId).toEqual(invoiceEntity.items[0].productId);
         expect(result.items[0].name).toEqual(invoiceEntity.items[0].name);
         expect(result.items[0].price).toEqual(invoiceEntity.items[0].price);
 
         expect(result.items[1].id.id).toEqual(invoiceEntity.items[1].id.id);
-        expect(result.items[1].productId).toEqual(invoiceEntity.items[1].productId);
         expect(result.items[1].name).toEqual(invoiceEntity.items[1].name);
         expect(result.items[1].price).toBe(invoiceEntity.items[1].price);
 
@@ -144,19 +112,7 @@ describe("Invoice repository tests", () => {
     });
 
     it("should generate a invoice", async () => {
-
-        await ProductModel.create({
-            id: product1.id.id,
-            name: product1.name,
-            price: product1.price,
-        });
-
-        await ProductModel.create({
-            id: product2.id.id,
-            name: product2.name,
-            price: product2.price,
-        });
-
+        
         const repository = new InvoiceRepository();
         const result = await repository.generate(invoiceEntity);
 
@@ -175,12 +131,10 @@ describe("Invoice repository tests", () => {
         // items
         expect(result.items.length).toBe(2);
         expect(result.items[0].id.id).toEqual(invoiceEntity.items[0].id.id);
-        expect(result.items[0].productId).toEqual(invoiceEntity.items[0].productId);
         expect(result.items[0].name).toEqual(invoiceEntity.items[0].name);
         expect(result.items[0].price).toEqual(invoiceEntity.items[0].price);
 
         expect(result.items[1].id.id).toEqual(invoiceEntity.items[1].id.id);
-        expect(result.items[1].productId).toEqual(invoiceEntity.items[1].productId);
         expect(result.items[1].name).toEqual(invoiceEntity.items[1].name);
         expect(result.items[1].price).toBe(invoiceEntity.items[1].price);
 

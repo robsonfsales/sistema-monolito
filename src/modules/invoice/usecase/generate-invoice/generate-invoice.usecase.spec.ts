@@ -1,6 +1,6 @@
 import Id from "../../../@shared/domain/value-object/id.value-object";
-import InvoiceItem from "../../domain/invoice-item.entity";
 import Invoice from "../../domain/invoice.entity";
+import Product from "../../domain/product.entity";
 import Address from "../../value-object/Address";
 import GenereateInvoiceUseCase from "./generate-invoice.usecase";
 
@@ -13,16 +13,14 @@ const address = new Address({
     zipCode: "07000-000",
 });
 
-const invoiceItem1 = new InvoiceItem({         
+const invoiceItem1 = new Product({         
     id: new Id("i1"),
-    productId: "p1",
     name: "Product 1",
     price: 10,
 });
 
-const invoiceItem2 = new InvoiceItem({ 
+const invoiceItem2 = new Product({ 
     id: new Id("i2"),
-    productId: "p2",
     name: "Product 2",
     price: 20,
 });
@@ -61,7 +59,7 @@ describe("Generate invoice Usecase unit test", () => {
             zipCode: invoiceEntity.address.zipCode,
             items: invoiceEntity.items.map((item) => {
                 let items = {
-                    id: item.productId,
+                    id: item.id.id,
                     name: item.name,
                     price: item.price,
                 };

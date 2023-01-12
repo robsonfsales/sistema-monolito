@@ -1,6 +1,7 @@
+import Id from "../../../@shared/domain/value-object/id.value-object";
 import UseCaseInterface from "../../../@shared/usecase/use-case.interface";
-import InvoiceItem from "../../domain/invoice-item.entity";
 import Invoice from "../../domain/invoice.entity";
+import Product from "../../domain/product.entity";
 import InvoiceGateway from "../../gateway/Invoice.gateway";
 import Address from "../../value-object/Address";
 import { GenerateInvoiceUseCaseInputDto, GenerateInvoiceUseCaseOutputDto } from "./generate-invoice.dto";
@@ -26,8 +27,8 @@ export default class GenereateInvoiceUseCase implements UseCaseInterface {
                 zipCode: input.zipCode,
             }),
             items: input.items.map((item) => {
-                let items = new InvoiceItem({
-                    productId: item.id,
+                let items = new Product({
+                    id: new Id(item.id),
                     name: item.name,
                     price: item.price,
                 });
@@ -49,7 +50,7 @@ export default class GenereateInvoiceUseCase implements UseCaseInterface {
             zipCode: entityOutput.address.zipCode,
             items: entityOutput.items.map((item) => {
                 let items = {
-                    id: item.productId,
+                    id: item.id.id,
                     name: item.name,
                     price: item.price,
                 }
